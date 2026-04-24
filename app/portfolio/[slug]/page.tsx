@@ -5,9 +5,10 @@ import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   try {
-    const project = await fetchProject(params.slug);
+    const project = await fetchProject(slug);
     return {
       title: `${project.title} — Ethos Studio`,
       description: project.description ?? undefined,
@@ -22,10 +23,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   let project;
   try {
-    project = await fetchProject(params.slug);
+    project = await fetchProject(slug);
   } catch {
     notFound();
   }
