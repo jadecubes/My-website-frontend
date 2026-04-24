@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f8f7f5;
+  --bg-card: #ffffff;
+  --fg: #1a1a1a;
+  --fg-2: #5c5c5c;
+  --fg-3: #9a9a9a;
+  --line: #e8e6e2;
+  --accent: #7a9e82;
+  --accent-hover: #6a8e72;
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.dark {
+  --bg: #0f0f0f;
+  --bg-subtle: #161616;
+  --bg-card: #1c1c1c;
+  --fg: #e8e4dc;
+  --fg-2: #a8a49c;
+  --fg-3: #6b6762;
+  --line: #2a2a28;
+  --accent: #b0dab9;
+  --accent-hover: #c0eac9;
+  --nav-bg: rgba(15, 15, 15, 0.88);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-lift {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background-color 0.3s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.img-zoom-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.img-zoom {
+  transition: transform 0.65s ease;
+}
+
+.img-zoom-container:hover .img-zoom {
+  transform: scale(1.06);
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.img-zoom-container:hover .img-overlay {
+  opacity: 1;
+}
+
+.page-enter {
+  animation: pageFadeIn 0.5s ease forwards;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+::selection { background-color: var(--accent); color: #fff; }
+
+/* Shared hover utilities. Using CSS :hover instead of JS onMouseEnter
+ * handlers avoids event-delegation pitfalls, null-ref risk, and
+ * stale-closure bugs. Active state is driven by `data-active="true"`
+ * so parents can still control it from React. */
+.link-muted {
+  color: var(--fg-2);
+  transition: color 0.25s ease;
+}
+.link-muted:hover {
+  color: var(--fg);
+}
+.link-muted[data-active="true"] {
+  color: var(--accent);
+}
+
+.tag-pill {
+  background-color: var(--bg-subtle);
+  color: var(--fg-2);
+  border: 1px solid var(--line);
+  transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+}
+.tag-pill:hover {
+  border-color: var(--fg-3);
+  color: var(--fg);
+}
+.tag-pill[data-active="true"],
+.tag-pill[data-active="true"]:hover {
+  background-color: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.scroll-hint {
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+}
+.scroll-hint:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
