@@ -4,8 +4,8 @@ Client/server-safe utilities. Primarily the HTTP layer that talks to the Laravel
 
 | File | Exports |
 |---|---|
-| `api.ts` | `fetchProjects`, `fetchProject`, `fetchServices`, `sendContactMessage` |
-| `dataService.ts` | `fetchPosts`, `getPostCoverImage` (blog/posts — endpoint not yet implemented in the backend) |
+| `api.ts` | `fetchProjects`, `fetchProject`, `fetchServices`, `sendContactMessage`, `getCoverImage`, `getGalleryImages` |
+| `dataService.ts` | `fetchPosts`, `getPostCoverImage` |
 
 ## Conventions
 

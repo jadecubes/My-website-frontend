@@ -16,11 +16,10 @@ React context providers.
 
 ```tsx
 'use client';
-import { useContext } from 'react';
-import { ThemeContext } from '@/context/ThemeContext';
+import { useTheme } from '@/context/ThemeContext';
 
 export function ThemeButton() {
-  const { theme, toggle } = useContext(ThemeContext);
+  const { theme, toggle } = useTheme();
   return <button onClick={toggle}>{theme === 'dark' ? '☾' : '☀'}</button>;
 }
 ```

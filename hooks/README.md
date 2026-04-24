@@ -8,18 +8,9 @@ Reusable React hooks.
 
 ## Usage
 
+Attach the returned `ref` to a container and give any descendant the class `reveal`.
+
 ```tsx
-'use client';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-
-export function Section() {
-  const ref = useScrollAnimation();
-  return (
-    <div ref={ref}>
-      <div className="reveal">I fade in when scrolled into view</div>
-    </div>
-  );
-}
+const ref = useScrollAnimation();
+<div ref={ref}><div className="reveal">…</div></div>
 ```
-
-Client-only hook — the file is marked `'use client'` because it touches the DOM and `IntersectionObserver`.

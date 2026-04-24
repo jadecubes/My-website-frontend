@@ -14,7 +14,7 @@ Wraps every page via `app/layout.tsx`.
 
 | Component | Purpose |
 |---|---|
-| `Navbar.tsx` | Top nav with theme toggle (consumes `ThemeContext`) |
+| `Navbar.tsx` | Top nav with theme toggle (via `useTheme()`) |
 | `Footer.tsx` | Site footer |
 
 ## pages/
@@ -36,5 +36,5 @@ Reusable primitives composed by the page clients.
 |---|---|
 | `PageHero.tsx` | Title/subtitle hero block used at the top of most pages |
 | `PortfolioCard.tsx` | Project card (image, title, category) for the gallery grid |
-| `PostCard.tsx` | Blog/post card (currently unused in routes — kept for upcoming posts feature) |
+| `PostCard.tsx` | Post card rendered in the homepage feed |
 | `TagFilter.tsx` | Filter pills for category/tag selection |
