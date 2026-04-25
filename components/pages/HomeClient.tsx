@@ -13,6 +13,7 @@ const LATEST_COUNT = 6;
 export function HomeClient() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const gridRef = useScrollAnimation();
   const latestRef = useRef<HTMLElement>(null);
 
@@ -27,6 +28,7 @@ export function HomeClient() {
       .catch(err => {
         if (ac.signal.aborted || err?.name === 'AbortError') return;
         console.error('fetchProjects failed', err);
+        setError(true);
         setLoading(false);
       });
     return () => ac.abort();
@@ -95,7 +97,15 @@ export function HomeClient() {
               ))}
         </div>
 
-        {!loading && projects.length === 0 && (
+        {!loading && error && (
+          <div className="text-center py-24">
+            <p className="font-serif text-2xl" style={{ color: 'var(--fg-3)', fontStyle: 'italic' }}>
+              Couldn&apos;t load latest work right now.
+            </p>
+          </div>
+        )}
+
+        {!loading && !error && projects.length === 0 && (
           <div className="text-center py-24">
             <p className="font-serif text-2xl" style={{ color: 'var(--fg-3)', fontStyle: 'italic' }}>
               Nothing here yet.
