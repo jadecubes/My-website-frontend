@@ -5,19 +5,15 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
-
-const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
+import { fetchNavLinks } from '@/lib/api';
+import type { NavLink as NavLinkType } from '@/types';
 
 export function Navbar() {
   const { theme, toggle } = useTheme();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navLinks, setNavLinks] = useState<NavLinkType[] | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -28,6 +24,19 @@ export function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchNavLinks({ signal: controller.signal })
+      .then(links => setNavLinks(links))
+      .catch(err => {
+        if (err?.name !== 'AbortError') {
+          // eslint-disable-next-line no-console
+          console.error('Failed to load nav links', err);
+        }
+      });
+    return () => controller.abort();
+  }, []);
 
   return (
     <>
@@ -51,7 +60,7 @@ export function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-10">
-            {navLinks.map(link => {
+            {navLinks?.map(link => {
               const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
               return (
                 <Link
@@ -92,7 +101,7 @@ export function Navbar() {
       {menuOpen && (
         <div className="fixed inset-0 z-40 flex flex-col pt-16 md:hidden" style={{ backgroundColor: 'var(--bg)' }}>
           <div className="flex flex-col px-8 pt-10 gap-8">
-            {navLinks.map(link => {
+            {navLinks?.map(link => {
               const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
               return (
                 <Link

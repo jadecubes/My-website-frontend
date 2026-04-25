@@ -38,3 +38,18 @@ export interface PaginatedResponse<T> {
   to: number | null;
   total: number;
 }
+
+export interface NavLink {
+  id: number;
+  label: string;
+  href: string;
+  sort_order: number;
+  is_published: boolean;
+}
+
+export interface SiteSettings {
+  site_name: string;
+  tagline: string | null;
+  footer_email: string | null;
+  copyright: string | null;
+}
