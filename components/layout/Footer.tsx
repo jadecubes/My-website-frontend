@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Mail } from 'lucide-react';
-import { fetchSiteSettings } from '@/lib/api';
+import { siteSettings } from '@/lib/api';
 import type { SiteSettings } from '@/types';
 
 export function Footer() {
@@ -11,7 +11,7 @@ export function Footer() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchSiteSettings({ signal: controller.signal })
+    siteSettings.get({ signal: controller.signal })
       .then(data => setSettings(data))
       .catch(err => {
         if (err?.name !== 'AbortError') {

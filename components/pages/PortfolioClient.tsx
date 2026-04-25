@@ -5,7 +5,7 @@ import { PortfolioCard } from '@/components/ui/PortfolioCard';
 import { TagFilter } from '@/components/ui/TagFilter';
 import { PageHero } from '@/components/ui/PageHero';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { fetchProjects } from '@/lib/api';
+import { projects as projectsApi } from '@/lib/api';
 import type { Project } from '@/types';
 
 const categories = ['Poster', 'Banner', 'Flyer', 'Infographic', 'Product'];
@@ -31,7 +31,7 @@ export function PortfolioClient() {
     setLoading(true);
     setError(false);
 
-    fetchProjects(safeSlug, { signal: ac.signal })
+    projectsApi.list(safeSlug, { signal: ac.signal })
       .then(data => {
         if (ac.signal.aborted) return;
         setProjects(data.data);
@@ -39,7 +39,7 @@ export function PortfolioClient() {
       })
       .catch(err => {
         if (ac.signal.aborted || err?.name === 'AbortError') return;
-        console.error('fetchProjects failed', err);
+        console.error('projects.list failed', err);
         setError(true);
         setLoading(false);
       });

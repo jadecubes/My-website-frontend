@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { PageHero } from '@/components/ui/PageHero';
-import { sendContactMessage } from '@/lib/api';
+import { contact } from '@/lib/api';
 
 export function ContactClient() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', body: '' });
@@ -13,11 +13,11 @@ export function ContactClient() {
     e.preventDefault();
     setStatus('loading');
     try {
-      await sendContactMessage(form);
+      await contact.send(form);
       setStatus('success');
       setForm({ name: '', email: '', subject: '', body: '' });
     } catch (err) {
-      console.error('sendContactMessage failed', err);
+      console.error('contact.send failed', err);
       setStatus('error');
     }
   };

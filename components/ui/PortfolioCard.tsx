@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { Project } from '@/types';
-import { getCoverImage } from '@/lib/api';
+import { projects } from '@/lib/api';
 
 interface PortfolioCardProps {
   project: Project;
@@ -10,7 +10,7 @@ interface PortfolioCardProps {
 }
 
 export function PortfolioCard({ project, featured = false }: PortfolioCardProps) {
-  const cover = getCoverImage(project);
+  const cover = projects.coverImage(project);
 
   return (
     <Link href={`/portfolio/${project.slug}`}>

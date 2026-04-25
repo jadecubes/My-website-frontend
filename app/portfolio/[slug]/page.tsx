@@ -1,4 +1,4 @@
-import { fetchProject, getCoverImage, getGalleryImages } from '@/lib/api';
+import { projects } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -8,14 +8,15 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const project = await fetchProject(slug);
+    const project = await projects.get(slug);
+    const cover = projects.coverImage(project);
     return {
       title: `${project.title} — Ethos Studio`,
       description: project.description ?? undefined,
       openGraph: {
         title: project.title,
         description: project.description ?? undefined,
-        images: getCoverImage(project) ? [getCoverImage(project) as string] : [],
+        images: cover ? [cover] : [],
       },
     };
   } catch {
@@ -27,13 +28,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   let project;
   try {
-    project = await fetchProject(slug);
+    project = await projects.get(slug);
   } catch {
     notFound();
   }
 
-  const cover = getCoverImage(project);
-  const gallery = getGalleryImages(project);
+  const cover = projects.coverImage(project);
+  const gallery = projects.galleryImages(project);
 
   return (
     <div className="page-enter pt-32">

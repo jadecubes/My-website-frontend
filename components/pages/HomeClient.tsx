@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { PortfolioCard } from '@/components/ui/PortfolioCard';
 import { PageHero } from '@/components/ui/PageHero';
-import { fetchProjects } from '@/lib/api';
+import { projects as projectsApi } from '@/lib/api';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import type { Project } from '@/types';
 
@@ -19,7 +19,7 @@ export function HomeClient() {
 
   useEffect(() => {
     const ac = new AbortController();
-    fetchProjects(undefined, { signal: ac.signal })
+    projectsApi.list(undefined, { signal: ac.signal })
       .then(res => {
         if (ac.signal.aborted) return;
         setProjects(res.data.slice(0, LATEST_COUNT));
@@ -27,7 +27,7 @@ export function HomeClient() {
       })
       .catch(err => {
         if (ac.signal.aborted || err?.name === 'AbortError') return;
-        console.error('fetchProjects failed', err);
+        console.error('projects.list failed', err);
         setError(true);
         setLoading(false);
       });

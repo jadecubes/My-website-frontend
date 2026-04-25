@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
-import { fetchNavLinks } from '@/lib/api';
+import { nav } from '@/lib/api';
 import type { NavLink as NavLinkType } from '@/types';
 
 export function Navbar() {
@@ -27,7 +27,7 @@ export function Navbar() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchNavLinks({ signal: controller.signal })
+    nav.list({ signal: controller.signal })
       .then(links => setNavLinks(links))
       .catch(err => {
         if (err?.name !== 'AbortError') {
