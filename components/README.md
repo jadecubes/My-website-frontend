@@ -35,6 +35,5 @@ Reusable primitives composed by the page clients.
 | Component | Purpose |
 |---|---|
 | `PageHero.tsx` | Title/subtitle hero block used at the top of most pages |
-| `PortfolioCard.tsx` | Project card (image, title, category) for the gallery grid |
-| `PostCard.tsx` | Post card rendered in the homepage feed |
+| `PortfolioCard.tsx` | Project card (image, title, category) for the gallery grid and homepage teaser |
 | `TagFilter.tsx` | Filter pills for category/tag selection |

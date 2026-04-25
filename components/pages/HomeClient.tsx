@@ -1,48 +1,45 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { PostCard } from '@/components/ui/PostCard';
-import { TagFilter } from '@/components/ui/TagFilter';
+import Link from 'next/link';
+import { PortfolioCard } from '@/components/ui/PortfolioCard';
 import { PageHero } from '@/components/ui/PageHero';
-import { fetchPosts } from '@/lib/dataService';
+import { fetchProjects } from '@/lib/api';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import type { Post } from '@/types';
+import type { Project } from '@/types';
 
-const heroTags = ['abstract', 'minimalism', 'design', 'code', 'painting', 'typography'];
+const LATEST_COUNT = 6;
 
 export function HomeClient() {
-  const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const gridRef = useScrollAnimation();
-  const postsRef = useRef<HTMLElement>(null);
+  const latestRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ac = new AbortController();
-    fetchPosts(undefined, { signal: ac.signal })
-      .then(data => {
+    fetchProjects(undefined, { signal: ac.signal })
+      .then(res => {
         if (ac.signal.aborted) return;
-        setPosts(data);
+        setProjects(res.data.slice(0, LATEST_COUNT));
         setLoading(false);
       })
       .catch(err => {
         if (ac.signal.aborted || err?.name === 'AbortError') return;
-        console.error('fetchPosts failed', err);
+        console.error('fetchProjects failed', err);
         setLoading(false);
       });
     return () => ac.abort();
   }, []);
 
-  const scrollToPosts = () => {
-    postsRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToLatest = () => {
+    latestRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const filtered = activeTag ? posts.filter(p => p.tags.includes(activeTag)) : posts;
 
   return (
     <div>
       <PageHero
-        label="Art & Code"
+        label="Studio"
         title={
           <>
             Making things
@@ -50,52 +47,55 @@ export function HomeClient() {
             <span style={{ fontStyle: 'italic', color: '#d4a96a' }}>with intention.</span>
           </>
         }
-        description="A journal at the intersection of visual art and software craft. Notes on process, experiments in form, and occasional meditations on why any of it matters."
+        description="A small graphic-design studio working on posters, banners, infographics, and product visuals — always with care for the work and the people behind it."
         imageUrl="https://images.pexels.com/photos/3109807/pexels-photo-3109807.jpeg?auto=compress&cs=tinysrgb&w=1920"
         imagePosition="center 30%"
-        onScrollDown={scrollToPosts}
+        onScrollDown={scrollToLatest}
       />
 
-      <section ref={postsRef} className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 py-24">
+      <section ref={latestRef} className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 py-24">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
           <div>
             <h2
               className="font-serif text-4xl mb-2"
               style={{ color: 'var(--fg)', fontWeight: 300 }}
             >
-              Latest
+              Latest work
             </h2>
             <p className="text-sm" style={{ color: 'var(--fg-3)' }}>
-              {filtered.length} {filtered.length === 1 ? 'post' : 'posts'}
+              {projects.length} {projects.length === 1 ? 'project' : 'projects'}
             </p>
           </div>
-        </div>
-
-        <div className="mb-10">
-          <TagFilter tags={heroTags} activeTag={activeTag} onSelect={setActiveTag} />
+          <Link
+            href="/portfolio"
+            className="link-muted text-xs uppercase tracking-widest self-start sm:self-end"
+            style={{ letterSpacing: '0.15em' }}
+          >
+            View all →
+          </Link>
         </div>
 
         <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
-            ? Array.from({ length: 6 }).map((_, i) => (
+            ? Array.from({ length: LATEST_COUNT }).map((_, i) => (
                 <div
                   key={i}
                   className="rounded-sm animate-pulse"
                   style={{ height: 280, backgroundColor: 'var(--bg-subtle)' }}
                 />
               ))
-            : filtered.map((post, i) => (
+            : projects.map((project, i) => (
                 <div
-                  key={post.id}
+                  key={project.id}
                   className="reveal"
                   style={{ transitionDelay: `${i * 0.08}s` }}
                 >
-                  <PostCard post={post} featured={i === 0 && !activeTag} />
+                  <PortfolioCard project={project} featured={i === 0} />
                 </div>
               ))}
         </div>
 
-        {!loading && filtered.length === 0 && (
+        {!loading && projects.length === 0 && (
           <div className="text-center py-24">
             <p className="font-serif text-2xl" style={{ color: 'var(--fg-3)', fontStyle: 'italic' }}>
               Nothing here yet.

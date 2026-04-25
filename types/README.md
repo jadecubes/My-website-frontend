@@ -8,7 +8,6 @@ Shared TypeScript types. Imported everywhere via the `@/types` alias (see `../ts
 | `Media` | `{ id, collection_name, original_url }` — Spatie Media Library record |
 | `Project` | Portfolio project with `category`, `media[]`, publish flag, sort order |
 | `Service` | Service offered — title, description, icon, sort order |
-| `Post` | Blog post — title, slug, excerpt, tags, published_at, media |
 | `PaginatedResponse<T>` | Mirrors Laravel's paginator: `{ data, current_page, last_page, per_page, from, to, total }` |
 
 ## Source of truth

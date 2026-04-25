@@ -29,17 +29,6 @@ export interface Service {
   sort_order: number;
 }
 
-export interface Post {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  tags: string[];
-  is_published: boolean;
-  published_at: string | null;
-  media: Media[];
-}
-
 export interface PaginatedResponse<T> {
   data: T[];
   current_page: number;
